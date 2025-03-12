@@ -1,1 +1,6 @@
-console.log("Hello world!");
+import express from 'express';
+import userAuthRouter from './routes/userAuthRouter';
+
+const app = express();
+
+app.use("/api/v1/user", userAuthRouter)
