@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import { loginSchema, signUpSchema } from "../types/zodSchema"
 import bcrypt from "bcrypt"
+import prisma from "../db"
 
 export const signUp = async (req: Request, res: Response) => {
     const { success, error } = signUpSchema.safeParse(req.body)
@@ -10,8 +11,15 @@ export const signUp = async (req: Request, res: Response) => {
     }
 
     try {
-        // DB Call
-        if (true) {
+        const response = await prisma.user.create({
+            data: {
+                name: req.body.name,
+                email: req.body.email,
+                phone: req.body.phone,
+                dob: req.body.dob
+            }
+        })
+        if (response) {
             res.status(200).json({ message: "Successfully signed up" })
         }
     } catch (err) {
