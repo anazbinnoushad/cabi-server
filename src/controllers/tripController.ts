@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import {NextFunction, Request, Response} from 'express';
 import prisma from '../db';
 
 export const getAllTrips = async (
@@ -7,7 +7,7 @@ export const getAllTrips = async (
     next: NextFunction,
 ) => {
     try {
-        const { skip = 0, take = 10 } = req.query;
+        const {skip = 0, take = 10} = req.query;
         const trips = await prisma.trip.findMany({
             skip: Number(skip),
             take: Number(take),
@@ -24,8 +24,8 @@ export const getAllTrips = async (
     }
 };
 
-export const createTrip = () => { };
-export const getTrip = () => { };
+export const createTrip = () => {};
+export const getTrip = () => {};
 
-export const updateTrip = () => { };
-export const deleteTrip = () => { };
+export const updateTrip = () => {};
+export const deleteTrip = () => {};

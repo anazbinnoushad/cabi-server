@@ -1,7 +1,7 @@
 import express from 'express';
 import userAuthRouter from './routes/userAuthRouter';
 import tripRouter from './routes/tripRouter';
-import { errorHandler } from './middleware/errorHandler';
+import {errorHandler} from './middleware/errorHandler';
 
 const app = express();
 app.use(express.json());
