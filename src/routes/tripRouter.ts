@@ -11,9 +11,9 @@ import {userAuth} from '../middleware/userAuth';
 const tripRouter = Router();
 
 tripRouter.get('/', userAuth, getAllTrips);
-tripRouter.get('/:id', getTrip);
+tripRouter.get('/:id', userAuth, getTrip);
 tripRouter.post('/', userAuth, createTrip);
-tripRouter.patch('/:id', updateTrip);
-tripRouter.delete('/:id', deleteTrip);
+tripRouter.patch('/:id', userAuth, updateTrip);
+tripRouter.delete('/:id', userAuth, deleteTrip);
 
 export default tripRouter;

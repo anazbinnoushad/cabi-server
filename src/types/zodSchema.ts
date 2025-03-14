@@ -17,3 +17,12 @@ export const createTripSchema = z.object({
     startOdo: z.number(),
     dayCode: z.string(),
 });
+
+export const updateTripSchema = z.object({
+    endOdo: z.number().optional(),
+    totalEarnings: z.number().optional(),
+    fuelExpense: z.number().optional(),
+    totalProfit: z.number().optional(),
+    poForUser: z.number().optional(),
+    poForCompany: z.number().optional(),
+});

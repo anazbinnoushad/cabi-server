@@ -1,6 +1,7 @@
 import {NextFunction, Request, Response} from 'express';
 import prisma from '../db';
-import {createTripSchema} from '../types/zodSchema';
+import {createTripSchema, updateTripSchema} from '../types/zodSchema';
+import {STATUS} from '../types/allTypes';
 
 export const getAllTrips = async (
     req: Request,
@@ -61,7 +62,55 @@ export const createTrip = async (
         next(err);
     }
 };
-export const getTrip = () => {};
+export const getTrip = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
+    try {
+        const id = req.params.id;
+        const trip = await prisma.trip.findFirst({
+            where: {userId: req.userId, id: Number(id)},
+        });
+        res.status(200).send({
+            message: 'Successfully retrieved trip',
+            result: trip,
+        });
+    } catch (err) {
+        next(err);
+    }
+};
 
-export const updateTrip = () => {};
+export const updateTrip = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
+    const {success, error, data} = updateTripSchema.safeParse(req.body);
+    const id = req.params.id;
+    if (!success) {
+        res.status(400).json({message: 'Bad request', error: error});
+        return;
+    }
+
+    try {
+        const currentTime = new Date().toISOString();
+        const response = await prisma.trip.update({
+            where: {id: Number(id)},
+            data: {
+                ...data,
+                endTime: currentTime,
+                status: STATUS.COMPLETED,
+            },
+        });
+        if (response) {
+            res.status(200).json({message: 'Successfully Updated!'});
+            console.log(response);
+        } else {
+            throw new Error('Could not able to update!');
+        }
+    } catch (err) {
+        next(err);
+    }
+};
 export const deleteTrip = () => {};

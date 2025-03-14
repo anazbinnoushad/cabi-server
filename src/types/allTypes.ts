@@ -1,6 +1,7 @@
 // All types goes here...
 
-const STATUS = {
+export const STATUS = {
     STARTED: 'STARTED',
     ONRIDE: 'ONRIDE',
+    COMPLETED: 'COMPLETED',
 };
