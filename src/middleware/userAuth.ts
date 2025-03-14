@@ -5,6 +5,7 @@ import {JWT_SECRET} from '../config';
 export const userAuth = (req: Request, res: Response, next: NextFunction) => {
     const authorization = req.headers.authorization;
     const token = authorization?.split(' ')[1];
+    console.log(`inauth`, req);
 
     if (token) {
         const verified = jwt.verify(token, JWT_SECRET) as {id: string};

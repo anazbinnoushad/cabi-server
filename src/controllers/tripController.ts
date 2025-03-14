@@ -1,5 +1,6 @@
 import {NextFunction, Request, Response} from 'express';
 import prisma from '../db';
+import {createTripSchema} from '../types/zodSchema';
 
 export const getAllTrips = async (
     req: Request,
@@ -24,7 +25,42 @@ export const getAllTrips = async (
     }
 };
 
-export const createTrip = () => {};
+export const createTrip = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
+    const {success, error, data} = createTripSchema.safeParse(req.body);
+    if (!success) {
+        res.status(400).json({message: 'Bad request', error: error});
+        return;
+    }
+
+    try {
+        const userId = req.userId as number;
+        const {startOdo, dayCode} = data;
+        const currentTime = new Date().toISOString();
+        const response = await prisma.trip.create({
+            data: {
+                userId: userId,
+                date: currentTime,
+                dayCode: dayCode,
+                startOdo: startOdo,
+                startTime: currentTime,
+                status: STATUS.ONRIDE,
+            },
+        });
+
+        if (response) {
+            res.status(200).json({message: 'Successfully Started!'});
+            console.log(response);
+        } else {
+            throw new Error('Could not able to start journey!');
+        }
+    } catch (err) {
+        next(err);
+    }
+};
 export const getTrip = () => {};
 
 export const updateTrip = () => {};
