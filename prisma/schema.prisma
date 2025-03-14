@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -20,4 +14,33 @@ model User {
   email    String  @unique
   password String
   dob      String
+  trips    Trip[]
+}
+
+model Trip {
+  id            Int       @id @default(autoincrement())
+  dayCode       String
+  date          DateTime
+  userId        Int
+  startOdo      Int
+  endOdo        Int?
+  startTime     DateTime
+  endTime       DateTime?
+  totalEarnings Decimal   @default(0.0)
+  fuelExpense   Decimal   @default(0.0)
+  totalProfit   Decimal   @default(0.0)
+  poForUser     Decimal   @default(0.0)
+  poForCompany  Decimal   @default(0.0)
+  status        String    @default("NOT_STARTED")
+  user          User      @relation(fields: [userId], references: [id])
+  fuel          Fuel[]
+}
+
+model Fuel {
+  id          Int      @id @default(autoincrement())
+  tripId      Int
+  odoOfRefill Int
+  time        DateTime
+  amount      Decimal
+  trip        Trip     @relation(fields: [tripId], references: [id])
 }
