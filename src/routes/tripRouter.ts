@@ -5,6 +5,7 @@ import {
     getAllTrips,
     getTrip,
     updateTrip,
+    getByDayCode,
 } from '../controllers/tripController';
 import {userAuth} from '../middleware/userAuth';
 
@@ -12,6 +13,7 @@ const tripRouter = Router();
 
 tripRouter.get('/', userAuth, getAllTrips);
 tripRouter.get('/:id', userAuth, getTrip);
+tripRouter.get('/dayCode/:dayCode', userAuth, getByDayCode);
 tripRouter.post('/', userAuth, createTrip);
 tripRouter.patch('/:id', userAuth, updateTrip);
 tripRouter.delete('/:id', userAuth, deleteTrip);

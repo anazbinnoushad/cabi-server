@@ -62,6 +62,7 @@ export const createTrip = async (
         next(err);
     }
 };
+
 export const getTrip = async (
     req: Request,
     res: Response,
@@ -113,6 +114,7 @@ export const updateTrip = async (
         next(err);
     }
 };
+
 export const deleteTrip = async (
     req: Request,
     res: Response,
@@ -125,6 +127,27 @@ export const deleteTrip = async (
         });
         res.status(200).send({
             message: 'Successfully deleted trip',
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const getByDayCode = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
+    try {
+        const dayCode = req.params.dayCode;
+        const userId = req.userId;
+
+        const trip = await prisma.trip.findFirst({
+            where: {userId: userId, dayCode: dayCode},
+        });
+        res.status(200).send({
+            message: 'Successfully retrived trip',
+            result: trip,
         });
     } catch (err) {
         next(err);
