@@ -6,10 +6,11 @@ import {
   getTrip,
   updateTrip,
 } from '../controllers/tripController';
+import { userAuth } from '../middleware/userAuth';
 
 const tripRouter = Router();
 
-tripRouter.get('/', getAllTrips);
+tripRouter.get('/', userAuth, getAllTrips);
 tripRouter.get('/:id', getTrip);
 tripRouter.post('/', createTrip);
 tripRouter.patch('/:id', updateTrip);
