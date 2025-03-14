@@ -113,4 +113,20 @@ export const updateTrip = async (
         next(err);
     }
 };
-export const deleteTrip = () => {};
+export const deleteTrip = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
+    try {
+        const id = req.params.id;
+        const trip = await prisma.trip.delete({
+            where: {id: Number(id)},
+        });
+        res.status(200).send({
+            message: 'Successfully deleted trip',
+        });
+    } catch (err) {
+        next(err);
+    }
+};
