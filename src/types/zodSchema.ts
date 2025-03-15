@@ -26,3 +26,10 @@ export const updateTripSchema = z.object({
     poForUser: z.number().optional(),
     poForCompany: z.number().optional(),
 });
+
+export const createFuelRecordSchema = z.object({
+    tripId: z.number(),
+    odoOfRefill: z.number(),
+    amount: z.number(),
+    type: z.string(),
+});
