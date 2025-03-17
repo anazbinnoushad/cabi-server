@@ -1,4 +1,4 @@
-import {Request, Response} from 'express';
+import {NextFunction, Request, Response} from 'express';
 import {loginSchema, signUpSchema} from '../types/zodSchema';
 import bcrypt from 'bcrypt';
 import prisma from '../db';
@@ -53,14 +53,34 @@ export const login = async (req: Request, res: Response) => {
                 throw new Error('Incorrect password');
             }
             const token = jwt.sign({id: foundUser.id}, JWT_SECRET);
+            const {password, ...userData} = foundUser;
             res.status(200).json({
                 message: 'Successfully logged in',
                 token: token,
+                result: userData,
             });
         } else {
             throw new Error('Could not find user');
         }
     } catch (err) {
         res.status(500).json({message: err});
+    }
+};
+
+export const getUserData = async (req: Request, res: Response) => {
+    try {
+        const userId = req.userId;
+        const response = await prisma.user.findUnique({
+            where: {id: userId},
+            select: {password: false, name: true, phone: true, email: true},
+        });
+        res.status(200).json({
+            result: response,
+            message: 'Successfully retrived user data',
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: err,
+        });
     }
 };
