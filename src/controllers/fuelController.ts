@@ -1,6 +1,6 @@
-import {NextFunction, Request, Response} from 'express';
+import { NextFunction, Request, Response } from 'express';
 import prisma from '../db';
-import {createFuelRecordSchema} from '../types/zodSchema';
+import { createFuelRecordSchema } from '../types/zodSchema';
 
 export const getAllFuelRecord = async (
     req: Request,
@@ -8,7 +8,7 @@ export const getAllFuelRecord = async (
     next: NextFunction,
 ) => {
     try {
-        const {skip = 0, take = 10} = req.query;
+        const { skip = 0, take = 10 } = req.query;
         const fuelRecords = await prisma.fuel.findMany({
             skip: Number(skip),
             take: Number(take),
@@ -30,15 +30,15 @@ export const createFuelRecord = async (
     res: Response,
     next: NextFunction,
 ) => {
-    const {success, data, error} = createFuelRecordSchema.safeParse(req.body);
+    const { success, data, error } = createFuelRecordSchema.safeParse(req.body);
     if (!success) {
-        res.status(400).json({message: 'Bad request', error: error});
+        res.status(400).json({ message: 'Bad request', error: error });
         return;
     }
 
     try {
         const currentTime = new Date().toISOString();
-        const {odoOfRefill, amount, tripId, type} = data;
+        const { odoOfRefill, amount, tripId, type } = data;
         const userId = req.userId as number;
         const response = await prisma.fuel.create({
             data: {
@@ -51,7 +51,7 @@ export const createFuelRecord = async (
             },
         });
         if (response) {
-            res.status(200).json({message: 'Successfully saved refill info'});
+            res.status(200).json({ message: 'Successfully saved refill info' });
         } else {
             throw new Error('Could not able save refill info!');
         }
@@ -68,7 +68,7 @@ export const deleteFuelRecord = async (
     try {
         const id = req.params.id;
         const response = await prisma.fuel.delete({
-            where: {id: Number(id)},
+            where: { id: Number(id) },
         });
         if (response) {
             res.status(200).send({

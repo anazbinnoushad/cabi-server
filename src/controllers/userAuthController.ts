@@ -1,14 +1,14 @@
-import {NextFunction, Request, Response} from 'express';
-import {loginSchema, signUpSchema} from '../types/zodSchema';
+import { NextFunction, Request, Response } from 'express';
+import { loginSchema, signUpSchema } from '../types/zodSchema';
 import bcrypt from 'bcrypt';
 import prisma from '../db';
 import jwt from 'jsonwebtoken';
-import {JWT_SECRET} from '../config';
+import { JWT_SECRET } from '../config';
 
 export const signUp = async (req: Request, res: Response) => {
-    const {success, error} = signUpSchema.safeParse(req.body);
+    const { success, error } = signUpSchema.safeParse(req.body);
     if (!success) {
-        res.status(400).json({message: 'Bad request', error: error});
+        res.status(400).json({ message: 'Bad request', error: error });
         return;
     }
 
@@ -24,7 +24,7 @@ export const signUp = async (req: Request, res: Response) => {
             },
         });
         if (response) {
-            res.status(200).json({message: 'Successfully signed up'});
+            res.status(200).json({ message: 'Successfully signed up' });
         }
     } catch (err) {
         res.status(500).json({
@@ -34,15 +34,15 @@ export const signUp = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
-    const {success, error} = loginSchema.safeParse(req.body);
+    const { success, error } = loginSchema.safeParse(req.body);
     if (!success) {
-        res.status(400).json({message: 'Bad request', error: error});
+        res.status(400).json({ message: 'Bad request', error: error });
         return;
     }
 
     try {
         const foundUser = await prisma.user.findFirst({
-            where: {email: req.body.email},
+            where: { email: req.body.email },
         });
         if (foundUser) {
             const verified = await bcrypt.compare(
@@ -52,8 +52,8 @@ export const login = async (req: Request, res: Response) => {
             if (!verified) {
                 throw new Error('Incorrect password');
             }
-            const token = jwt.sign({id: foundUser.id}, JWT_SECRET);
-            const {password, ...userData} = foundUser;
+            const token = jwt.sign({ id: foundUser.id }, JWT_SECRET);
+            const { password, ...userData } = foundUser;
             res.status(200).json({
                 message: 'Successfully logged in',
                 token: token,
@@ -63,7 +63,7 @@ export const login = async (req: Request, res: Response) => {
             throw new Error('Could not find user');
         }
     } catch (err) {
-        res.status(500).json({message: err});
+        res.status(500).json({ message: err });
     }
 };
 
@@ -71,8 +71,8 @@ export const getUserData = async (req: Request, res: Response) => {
     try {
         const userId = req.userId;
         const response = await prisma.user.findUnique({
-            where: {id: userId},
-            select: {password: false, name: true, phone: true, email: true},
+            where: { id: userId },
+            select: { password: false, name: true, phone: true, email: true },
         });
         res.status(200).json({
             result: response,

@@ -1,4 +1,4 @@
-import {Router} from 'express';
+import { Router } from 'express';
 import {
     createTrip,
     deleteTrip,
@@ -7,7 +7,7 @@ import {
     updateTrip,
     getByDayCode,
 } from '../controllers/tripController';
-import {userAuth} from '../middleware/userAuth';
+import { userAuth } from '../middleware/userAuth';
 
 const tripRouter = Router();
 

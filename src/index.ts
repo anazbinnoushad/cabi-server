@@ -1,7 +1,7 @@
 import express from 'express';
 import userAuthRouter from './routes/userAuthRouter';
 import tripRouter from './routes/tripRouter';
-import {errorHandler} from './middleware/errorHandler';
+import { errorHandler } from './middleware/errorHandler';
 import fuelRouter from './routes/fuelRouter';
 
 const app = express();

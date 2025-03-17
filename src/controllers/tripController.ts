@@ -1,7 +1,7 @@
-import {NextFunction, Request, Response} from 'express';
+import { NextFunction, Request, Response } from 'express';
 import prisma from '../db';
-import {createTripSchema, updateTripSchema} from '../types/zodSchema';
-import {STATUS} from '../types/allTypes';
+import { createTripSchema, updateTripSchema } from '../types/zodSchema';
+import { STATUS } from '../types/allTypes';
 
 export const getAllTrips = async (
     req: Request,
@@ -9,7 +9,7 @@ export const getAllTrips = async (
     next: NextFunction,
 ) => {
     try {
-        const {skip = 0, take = 10} = req.query;
+        const { skip = 0, take = 10 } = req.query;
         const trips = await prisma.trip.findMany({
             skip: Number(skip),
             take: Number(take),
@@ -31,15 +31,15 @@ export const createTrip = async (
     res: Response,
     next: NextFunction,
 ) => {
-    const {success, error, data} = createTripSchema.safeParse(req.body);
+    const { success, error, data } = createTripSchema.safeParse(req.body);
     if (!success) {
-        res.status(400).json({message: 'Bad request', error: error});
+        res.status(400).json({ message: 'Bad request', error: error });
         return;
     }
 
     try {
         const userId = req.userId as number;
-        const {startOdo, dayCode} = data;
+        const { startOdo, dayCode } = data;
         const currentTime = new Date().toISOString();
         const response = await prisma.trip.create({
             data: {
@@ -53,7 +53,7 @@ export const createTrip = async (
         });
 
         if (response) {
-            res.status(200).json({message: 'Successfully Started!'});
+            res.status(200).json({ message: 'Successfully Started!' });
             console.log(response);
         } else {
             throw new Error('Could not able to start journey!');
@@ -71,7 +71,7 @@ export const getTrip = async (
     try {
         const id = req.params.id;
         const trip = await prisma.trip.findFirst({
-            where: {userId: req.userId, id: Number(id)},
+            where: { userId: req.userId, id: Number(id) },
         });
         res.status(200).send({
             message: 'Successfully retrieved trip',
@@ -87,17 +87,17 @@ export const updateTrip = async (
     res: Response,
     next: NextFunction,
 ) => {
-    const {success, error, data} = updateTripSchema.safeParse(req.body);
+    const { success, error, data } = updateTripSchema.safeParse(req.body);
     const id = req.params.id;
     if (!success) {
-        res.status(400).json({message: 'Bad request', error: error});
+        res.status(400).json({ message: 'Bad request', error: error });
         return;
     }
 
     try {
         const currentTime = new Date().toISOString();
         const response = await prisma.trip.update({
-            where: {id: Number(id)},
+            where: { id: Number(id) },
             data: {
                 ...data,
                 endTime: currentTime,
@@ -105,7 +105,7 @@ export const updateTrip = async (
             },
         });
         if (response) {
-            res.status(200).json({message: 'Successfully Updated!'});
+            res.status(200).json({ message: 'Successfully Updated!' });
             console.log(response);
         } else {
             throw new Error('Could not able to update!');
@@ -123,7 +123,7 @@ export const deleteTrip = async (
     try {
         const id = req.params.id;
         const trip = await prisma.trip.delete({
-            where: {id: Number(id)},
+            where: { id: Number(id) },
         });
         res.status(200).send({
             message: 'Successfully deleted trip',
@@ -143,7 +143,7 @@ export const getByDayCode = async (
         const userId = req.userId;
 
         const trip = await prisma.trip.findFirst({
-            where: {userId: userId, dayCode: dayCode},
+            where: { userId: userId, dayCode: dayCode },
         });
         res.status(200).send({
             message: 'Successfully retrived trip',

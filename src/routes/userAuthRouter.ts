@@ -1,6 +1,6 @@
-import {Router} from 'express';
-import {getUserData, login, signUp} from '../controllers/userAuthController';
-import {userAuth} from '../middleware/userAuth';
+import { Router } from 'express';
+import { getUserData, login, signUp } from '../controllers/userAuthController';
+import { userAuth } from '../middleware/userAuth';
 
 const userAuthRouter = Router();
 

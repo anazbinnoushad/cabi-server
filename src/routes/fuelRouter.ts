@@ -1,10 +1,10 @@
-import {Router} from 'express';
+import { Router } from 'express';
 import {
     getAllFuelRecord,
     createFuelRecord,
     deleteFuelRecord,
 } from '../controllers/fuelController';
-import {userAuth} from '../middleware/userAuth';
+import { userAuth } from '../middleware/userAuth';
 
 const fuelRouter = Router();
 
