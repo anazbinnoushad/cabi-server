@@ -144,6 +144,7 @@ export const getByDayCode = async (
 
         const trip = await prisma.trip.findFirst({
             where: { userId: userId, dayCode: dayCode },
+            include: { fuel: true },
         });
         res.status(200).send({
             message: 'Successfully retrived trip',
