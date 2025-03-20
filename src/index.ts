@@ -14,4 +14,4 @@ app.use('/api/v1/fuels', fuelRouter);
 // Error handler
 app.use(errorHandler);
 
-app.listen(3002);
+app.listen(3000);
