@@ -1,7 +1,11 @@
 name: Deploy to VM
 on:
+    workflow_dispatch:
     push:
-        branches: [main]
+        branches: ['release']
+    release:
+        types:
+            - published
 
 jobs:
     build:
