@@ -26,6 +26,30 @@ export const getAllTrips = async (
     }
 };
 
+export const getPreviousTrips = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
+    try {
+        const { skip = 0, take = 10 } = req.query;
+        const trips = await prisma.trip.findMany({
+            skip: Number(skip),
+            take: Number(take),
+            where: {
+                userId: req.userId,
+                status: STATUS.COMPLETED,
+            },
+        });
+        res.status(200).json({
+            message: 'Successfully retrieved trips',
+            result: trips,
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
 export const createTrip = async (
     req: Request,
     res: Response,
