@@ -95,13 +95,22 @@ export const updateTrip = async (
     }
 
     try {
-        const currentTime = new Date().toISOString();
+        const currentTime = new Date();
+        const addOnFields = {
+            endTime: currentTime.toISOString(),
+            status: STATUS.COMPLETED,
+            totalOdo: Number(data.endOdo - data.startOdo),
+            duration: Math.floor(
+                (currentTime.getTime() - new Date(data.startTime).getTime()) /
+                    1000,
+            ),
+        };
+
         const response = await prisma.trip.update({
             where: { id: Number(id) },
             data: {
                 ...data,
-                endTime: currentTime,
-                status: STATUS.COMPLETED,
+                ...addOnFields,
             },
         });
         if (response) {

@@ -19,7 +19,9 @@ export const createTripSchema = z.object({
 });
 
 export const updateTripSchema = z.object({
-    endOdo: z.number().optional(),
+    startTime: z.string(),
+    startOdo: z.number(),
+    endOdo: z.number(),
     totalEarnings: z.number().optional(),
     fuelExpense: z.number().optional(),
     totalProfit: z.number().optional(),
